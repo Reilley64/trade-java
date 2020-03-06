@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -18,7 +19,7 @@ public class User extends Model {
         USER, ADMIN;
     }
 
-    @NotEmpty @Column(unique = true) private String username;
+    @NotEmpty @Column(unique = true) @Email private String username;
     @NotEmpty private String password;
     @NotEmpty private String firstName;
     @NotEmpty private String lastName;

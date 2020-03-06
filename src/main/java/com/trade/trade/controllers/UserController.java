@@ -47,6 +47,7 @@ public class UserController {
         Transaction transaction = new Transaction();
         transaction.setUser(user);
         transaction.setDirection(Transaction.Direction.CREDIT);
+        transaction.setDescription("Initial account credit");
         transaction.setValue(100000000);
         transactionRepository.save(transaction);
 
