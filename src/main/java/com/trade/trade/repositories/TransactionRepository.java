@@ -1,0 +1,19 @@
+package com.trade.trade.repositories;
+
+import com.trade.trade.models.Transaction;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+public interface TransactionRepository extends Repository<Transaction, Long> {
+    List<Transaction> findByUserUuid(UUID userUuid);
+
+    Optional<Transaction> findByUserUuidAndUuid(UUID uuid, UUID userUuid);
+
+    @Query("SELECT SUM(CASE WHEN t.direction = 0 THEN t.value ELSE -t.value END)" +
+                    " FROM Transaction t INNER JOIN User u ON t.user = u" +
+                    " WHERE u.uuid = ?1")
+    long findBalanceByUserUuid(UUID userUuid);
+}
