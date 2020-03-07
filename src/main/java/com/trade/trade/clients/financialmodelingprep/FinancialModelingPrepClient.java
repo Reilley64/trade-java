@@ -1,6 +1,7 @@
 package com.trade.trade.clients.financialmodelingprep;
 
 import com.trade.trade.clients.financialmodelingprep.objects.HistoricalDailyPrice;
+import com.trade.trade.clients.financialmodelingprep.objects.Profile;
 import com.trade.trade.clients.financialmodelingprep.objects.RealTimePrice;
 import com.trade.trade.clients.financialmodelingprep.objects.RealTimePriceList;
 import com.trade.trade.models.Asset;
@@ -11,6 +12,11 @@ import java.util.List;
 
 public class FinancialModelingPrepClient {
     private String base = "https://financialmodelingprep.com/api/v3";
+
+    public Profile getProfile(Asset asset) {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(base + "/company/profile/" + asset.getSymbol(), Profile.class);
+    }
 
     public RealTimePrice getRealTimePrice(Asset asset) {
         RestTemplate restTemplate = new RestTemplate();

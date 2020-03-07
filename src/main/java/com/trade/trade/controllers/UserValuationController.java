@@ -25,14 +25,16 @@ public class UserValuationController {
     }
 
     @GetMapping("/valuations")
-    public List<UserValuation> getAllUsersBalances(@PathVariable UUID userUuid) {
+    public List<UserValuation> getAllUsersValuations(@PathVariable UUID userUuid) {
         userRepository.findByUuid(userUuid)
                 .orElseThrow(() -> new ResourceNotFoundException(User.class, userUuid));
         return repository.findByUserUuid(userUuid);
     }
 
     @GetMapping("/valuations/{uuid}")
-    public UserValuation getUserByUuid(@PathVariable UUID userUuid, @PathVariable UUID uuid) {
+    public UserValuation getUserValuationByUuid(@PathVariable UUID userUuid, @PathVariable UUID uuid) {
+        userRepository.findByUuid(userUuid)
+                .orElseThrow(() -> new ResourceNotFoundException(User.class, userUuid));
         return repository.findByUserUuidAndUuid(uuid, userUuid)
                 .orElseThrow(() -> new ResourceNotFoundException(UserValuation.class, uuid));
     }

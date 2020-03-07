@@ -17,6 +17,8 @@ public class Asset extends Model {
     @NotEmpty private String exchange;
     @NotEmpty private String companyName;
     @NotEmpty private String description;
+    @NotEmpty private String industry;
+    @NotEmpty private String sector;
     @NotEmpty private String website;
     @NotEmpty private String image;
 }

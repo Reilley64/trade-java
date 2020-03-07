@@ -4,12 +4,14 @@ import com.trade.trade.clients.financialmodelingprep.FinancialModelingPrepClient
 import com.trade.trade.exceptions.ResourceNotFoundException;
 import com.trade.trade.models.*;
 import com.trade.trade.repositories.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
 @RestController
+@RequestMapping("/users/{userUuid}")
 public class OrderController {
     private final OrderRepository repository;
     private final AssetRepository assetRepository;
@@ -27,22 +29,30 @@ public class OrderController {
     public FinancialModelingPrepClient financialModelingPrepClient = new FinancialModelingPrepClient();
 
     @GetMapping("/orders")
-    public List<Order> getAllOrders() {
-        return repository.findAll();
+    @PreAuthorize("#userUuid == authentication.principal.user.uuid")
+    public List<Order> getAllOrders(@PathVariable UUID userUuid) {
+        userRepository.findByUuid(userUuid)
+                .orElseThrow(() -> new ResourceNotFoundException(User.class, userUuid));
+        return repository.findByUserUuid(userUuid);
     }
 
     @GetMapping("/orders/{uuid}")
-    public Order getOrderByUuid(@PathVariable UUID uuid) {
-        return repository.findByUuid(uuid)
+    @PreAuthorize("#userUuid == authentication.principal.user.uuid")
+    public Order getOrderByUuid(@PathVariable UUID userUuid, @PathVariable UUID uuid) {
+        userRepository.findByUuid(userUuid)
+                .orElseThrow(() -> new ResourceNotFoundException(User.class, userUuid));
+        return repository.findByUserUuidAndUuid(uuid, userUuid)
                 .orElseThrow(() -> new ResourceNotFoundException(Order.class, uuid));
     }
 
     @PostMapping("/orders")
-    public Order createOrder(@RequestBody Order order) {
-        order.setUser(userRepository.findByUuid(order.getUser().getUuid())
+    @PreAuthorize("#userUuid == authentication.principal.user.uuid")
+    public Order createOrder(@PathVariable UUID userUuid, @RequestBody Order order) {
+        order.setUser(userRepository.findByUuid(userUuid)
                 .orElseThrow(() -> new ResourceNotFoundException(User.class, order.getUser().getUuid())));
         order.setAsset(assetRepository.findByUuid(order.getAsset().getUuid())
-                .orElseThrow(() -> new ResourceNotFoundException(Asset.class, order.getAsset().getUuid())));
+                .orElse(assetRepository.findBySymbol(order.getAsset().getSymbol())
+                        .orElseThrow(() -> new ResourceNotFoundException(Asset.class, order.getAsset().getUuid()))));
         order.setPrice((long) (financialModelingPrepClient.getRealTimePrice(order.getAsset()).getPrice() * 100));
         repository.save(order);
         order.setBrokerage(2000);

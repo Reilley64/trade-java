@@ -38,7 +38,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                 User user = userRepository.findByUsername(username)
                         .orElseThrow(() -> new ResourceNotFoundException(User.class, username));
                 UserPrincipal userPrincipal = new UserPrincipal(user);
-                return new UsernamePasswordAuthenticationToken(username, null, userPrincipal.getAuthorities());
+                return new UsernamePasswordAuthenticationToken(userPrincipal, username, userPrincipal.getAuthorities());
             }
         }
 

@@ -7,6 +7,7 @@ import com.trade.trade.models.UserValuation;
 import com.trade.trade.repositories.TransactionRepository;
 import com.trade.trade.repositories.UserRepository;
 import com.trade.trade.repositories.UserValuationRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,6 +61,7 @@ public class UserController {
     }
 
     @PutMapping("/users/{uuid}")
+    @PreAuthorize("#uuid == authentication.principal.user.uuid")
     public User updateUser(@PathVariable UUID uuid, @RequestBody User newUser) {
         return repository.findByUuid(uuid)
                 .map(user -> {
@@ -76,6 +78,7 @@ public class UserController {
     }
 
     @DeleteMapping("/users/{uuid}")
+    @PreAuthorize("#uuid == authentication.principal.user.uuid")
     public void deleteUser(@PathVariable UUID uuid) {
         repository.deleteByUuid(uuid);
     }

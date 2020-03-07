@@ -3,6 +3,7 @@ package com.trade.trade.controllers;
 import com.trade.trade.clients.financialmodelingprep.FinancialModelingPrepClient;
 import com.trade.trade.clients.financialmodelingprep.objects.History;
 import com.trade.trade.clients.financialmodelingprep.objects.HistoricalDailyPrice;
+import com.trade.trade.clients.financialmodelingprep.objects.Profile;
 import com.trade.trade.exceptions.ResourceNotFoundException;
 import com.trade.trade.models.Asset;
 import com.trade.trade.models.AssetValuation;
@@ -33,23 +34,10 @@ public class AssetController {
         return repository.findAll();
     }
 
-    @GetMapping("/assets/{uuid}")
-    public Asset getAssetByUuid(@PathVariable UUID uuid) {
-        return repository.findByUuid(uuid)
-                .orElseThrow(() -> new ResourceNotFoundException(Asset.class, uuid));
-    }
-
     @GetMapping("/assets/{symbol}")
     public Asset getAssetBySymbol(@PathVariable String symbol) {
         return repository.findBySymbol(symbol)
                 .orElseThrow(() -> new ResourceNotFoundException(Asset.class, symbol));
-    }
-
-    @GetMapping("/assets/{uuid}/price")
-    public long getAssetPriceBySymbol(@PathVariable UUID uuid) {
-        Asset asset = repository.findByUuid(uuid)
-                .orElseThrow(() -> new ResourceNotFoundException(Asset.class, uuid));
-        return (long) (financialModelingPrepClient.getRealTimePrice(asset).getPrice() * 100);
     }
 
     @GetMapping("/assets/{symbol}/price")
@@ -59,10 +47,19 @@ public class AssetController {
         return (long) (financialModelingPrepClient.getRealTimePrice(asset).getPrice() * 100);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/assets")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Asset createAsset(@RequestBody Asset asset) {
+        Profile profile = financialModelingPrepClient.getProfile(asset);
+        asset.setExchange(profile.getProfile().getExchange());
+        asset.setCompanyName(profile.getProfile().getCompanyName());
+        asset.setDescription(profile.getProfile().getDescription());
+        asset.setIndustry(profile.getProfile().getIndustry());
+        asset.setSector(profile.getProfile().getSector());
+        asset.setWebsite(profile.getProfile().getWebsite());
+        asset.setImage(profile.getProfile().getImage());
         asset = repository.save(asset);
+
         HistoricalDailyPrice historicalDailyPrice = financialModelingPrepClient.getHistoricalDailyPrice(asset);
         List<AssetValuation> assetValuations = new ArrayList<>();
         for (History history : historicalDailyPrice.getHistorical()) {
@@ -77,6 +74,7 @@ public class AssetController {
             assetValuations.add(assetValuation);
         }
         assetValuationRepository.saveAll(assetValuations);
+
         return asset;
     }
 }
