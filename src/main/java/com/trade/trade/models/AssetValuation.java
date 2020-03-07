@@ -1,5 +1,6 @@
 package com.trade.trade.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,11 +15,13 @@ import java.util.Date;
 @NoArgsConstructor
 @Table(name = "asset_valuations")
 public class AssetValuation extends Model {
-    @NotNull @ManyToOne private Asset asset;
     @NotNull private Date date;
     @NotNull private long open;
     @NotNull private long close;
     @NotNull private long high;
     @NotNull private long low;
     @NotNull private long volume;
+
+    @ManyToOne
+    @JsonIgnore @NotNull private Asset asset;
 }

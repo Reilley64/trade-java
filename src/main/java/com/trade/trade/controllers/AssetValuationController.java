@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/assets/{assetUuid}")
+@RequestMapping("/assets/{assetSymbol}")
 public class AssetValuationController {
     private final AssetValuationRepository repository;
     private final AssetRepository assetRepository;
@@ -28,9 +28,9 @@ public class AssetValuationController {
     }
 
     @GetMapping("/valuations")
-    public List<AssetValuation> getAllAssetValuations(@PathVariable UUID assetUuid) {
-        assetRepository.findByUuid(assetUuid)
-                .orElseThrow(() -> new ResourceNotFoundException(Asset.class, assetUuid));
-        return repository.findByAssetUuid(assetUuid);
+    public List<AssetValuation> getAllAssetValuations(@PathVariable String assetSymbol) {
+        assetRepository.findBySymbol(assetSymbol)
+                .orElseThrow(() -> new ResourceNotFoundException(Asset.class, assetSymbol));
+        return repository.findByAssetSymbol(assetSymbol);
     }
 }
