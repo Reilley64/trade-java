@@ -8,11 +8,9 @@ import com.trade.trade.models.User;
 import com.trade.trade.repositories.AssetRepository;
 import com.trade.trade.repositories.AssetValuationRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,9 +26,11 @@ public class AssetValuationController {
     }
 
     @GetMapping("/valuations")
-    public List<AssetValuation> getAllAssetValuations(@PathVariable String assetSymbol) {
+    public List<AssetValuation> getAllAssetValuations(@PathVariable String assetSymbol,
+                                                      @RequestParam(name = "start-date") Date startDate,
+                                                      @RequestParam(name = "end-date") Date endDate) {
         assetRepository.findBySymbol(assetSymbol)
                 .orElseThrow(() -> new ResourceNotFoundException(Asset.class, assetSymbol));
-        return repository.findByAssetSymbol(assetSymbol);
+        return repository.findByAssetSymbolAndDateBetween(assetSymbol, startDate, endDate);
     }
 }

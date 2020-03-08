@@ -25,7 +25,7 @@ Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZWlsbGV5Z3JheUBnbWFpbC5jb20iLCJleHAiOjE1ODQ0MDYyMTV9.i7l6y3Goyfmf_5P5gAjmrewkqEo__B-pwdoFOXL8Hb2a0DfJxnnmrkAeQVlDzwOZfA6ZGe-ZhFb6VJhsG445jw
 
 {
-  "symbol": "AAPL"
+  "symbol": "SNE"
 }
 
 ###
