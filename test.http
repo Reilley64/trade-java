@@ -28,7 +28,7 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZWlsbGV5Z
 
 POST http://localhost:8080/stocks
 Content-Type: application/json
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZWlsbGV5Z3JheUBnbWFpbC5jb20iLCJleHAiOjE1ODQ2ODUwNTR9.QOiqw7vYfifaUDW44JGXu8SogmefUnfRforYKsMZWzNdYDUp6lV_EjaCovUrOU1gmobAqlTNUtPBFB22UZ9ldQ
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZWlsbGV5Z3JheUBnbWFpbC5jb20iLCJleHAiOjE1ODQ3MDMzNDF9.QG4EZ5w4JaOV0lv2UxowAk5kc_7kM0p86SF_j5GpcXRUPfEv6wLGeQwFJVPjQ4dRriNqP0P7iqrBUaYz6CQZtQ
 
 {
   "symbol": "NVDA"
