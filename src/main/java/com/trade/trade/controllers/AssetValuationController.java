@@ -1,18 +1,14 @@
 package com.trade.trade.controllers;
 
 import com.trade.trade.exceptions.ResourceNotFoundException;
-import com.trade.trade.models.Asset;
+import com.trade.trade.models.assets.Asset;
 import com.trade.trade.models.AssetValuation;
-import com.trade.trade.models.Order;
-import com.trade.trade.models.User;
-import com.trade.trade.repositories.AssetRepository;
+import com.trade.trade.repositories.assets.AssetRepository;
 import com.trade.trade.repositories.AssetValuationRepository;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/assets/{assetSymbol}")

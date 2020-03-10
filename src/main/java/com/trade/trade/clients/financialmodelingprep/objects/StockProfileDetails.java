@@ -3,7 +3,7 @@ package com.trade.trade.clients.financialmodelingprep.objects;
 import lombok.Data;
 
 @Data
-public class ProfileDetails {
+public class StockProfileDetails {
     private double price;
     private String beta;
     private String volAvg;

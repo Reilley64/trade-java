@@ -20,12 +20,18 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:8080/assets
+GET http://localhost:8080/user
+Accept: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZWlsbGV5Z3JheUBnbWFpbC5jb20iLCJleHAiOjE1ODQ2OTAyNTZ9.s5L4XxzzPRtTI1-i58U7vP1vYAyhgnIU4A3bo2G4FwlTCKsLryuRYeCqHsPhR4mLovudbvKsuNjUAvQLWZj8Hg
+
+###
+
+POST http://localhost:8080/stocks
 Content-Type: application/json
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZWlsbGV5Z3JheUBnbWFpbC5jb20iLCJleHAiOjE1ODQ0MDYyMTV9.i7l6y3Goyfmf_5P5gAjmrewkqEo__B-pwdoFOXL8Hb2a0DfJxnnmrkAeQVlDzwOZfA6ZGe-ZhFb6VJhsG445jw
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZWlsbGV5Z3JheUBnbWFpbC5jb20iLCJleHAiOjE1ODQ2ODUwNTR9.QOiqw7vYfifaUDW44JGXu8SogmefUnfRforYKsMZWzNdYDUp6lV_EjaCovUrOU1gmobAqlTNUtPBFB22UZ9ldQ
 
 {
-  "symbol": "SNE"
+  "symbol": "NVDA"
 }
 
 ###

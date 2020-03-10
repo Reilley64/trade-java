@@ -3,7 +3,7 @@ package com.trade.trade.clients.financialmodelingprep.objects;
 import lombok.Data;
 
 @Data
-public class Profile {
+public class StockProfile {
     private String symbol;
-    private ProfileDetails profile;
+    private StockProfileDetails profile;
 }

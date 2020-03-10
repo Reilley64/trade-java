@@ -1,6 +1,7 @@
 package com.trade.trade.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.trade.trade.models.assets.Asset;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

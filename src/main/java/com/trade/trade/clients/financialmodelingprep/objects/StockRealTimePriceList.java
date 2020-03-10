@@ -5,6 +5,6 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class RealTimePriceList {
-    private List<RealTimePrice> companiesPriceList;
+public class StockRealTimePriceList {
+    private List<StockRealTimePrice> companiesPriceList;
 }

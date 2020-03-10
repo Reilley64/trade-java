@@ -3,7 +3,11 @@ package com.trade.trade.controllers;
 import com.trade.trade.clients.financialmodelingprep.FinancialModelingPrepClient;
 import com.trade.trade.exceptions.ResourceNotFoundException;
 import com.trade.trade.models.*;
+import com.trade.trade.models.assets.Asset;
+import com.trade.trade.models.assets.Crypto;
+import com.trade.trade.models.assets.Stock;
 import com.trade.trade.repositories.*;
+import com.trade.trade.repositories.assets.AssetRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,9 +57,15 @@ public class OrderController {
         order.setAsset(assetRepository.findByUuid(order.getAsset().getUuid())
                 .orElse(assetRepository.findBySymbol(order.getAsset().getSymbol())
                         .orElseThrow(() -> new ResourceNotFoundException(Asset.class, order.getAsset().getUuid()))));
-        order.setPrice((long) (financialModelingPrepClient.getRealTimePrice(order.getAsset()).getPrice() * 100));
-        repository.save(order);
+
+        if (order.getAsset() instanceof Stock) {
+            order.setPrice((long) (financialModelingPrepClient.getStockRealTimePrice((Stock) order.getAsset()).getPrice() * 100));
+        } else if (order.getAsset() instanceof Crypto) {
+            order.setPrice((long) (financialModelingPrepClient.getCryptoRealTimePrice((Crypto) order.getAsset()).getPrice() * 100));
+        }
+
         order.setBrokerage(2000);
+        repository.save(order);
 
         if (transactionRepository.findBalanceByUserUuid(order.getUser().getUuid()) < order.getTotal()) throw new RuntimeException();
         Transaction transaction = new Transaction();

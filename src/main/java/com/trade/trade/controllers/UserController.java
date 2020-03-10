@@ -7,7 +7,9 @@ import com.trade.trade.models.UserValuation;
 import com.trade.trade.repositories.TransactionRepository;
 import com.trade.trade.repositories.UserRepository;
 import com.trade.trade.repositories.UserValuationRepository;
+import com.trade.trade.security.UserPrincipal;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +29,11 @@ public class UserController {
         this.transactionRepository = transactionRepository;
         this.userValuationRepository = userValuationRepository;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    @GetMapping("/user")
+    public User getCurrentUser() {
+        return ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
     }
 
     @GetMapping("/users")
