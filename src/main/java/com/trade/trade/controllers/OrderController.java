@@ -1,6 +1,7 @@
 package com.trade.trade.controllers;
 
 import com.trade.trade.clients.financialmodelingprep.FinancialModelingPrepClient;
+import com.trade.trade.datatransferobjects.AssetHoldingResponse;
 import com.trade.trade.exceptions.ResourceNotFoundException;
 import com.trade.trade.models.*;
 import com.trade.trade.models.assets.Asset;
@@ -34,10 +35,32 @@ public class OrderController {
 
     @GetMapping("/orders")
     @PreAuthorize("#userUuid == authentication.principal.user.uuid")
-    public List<Order> getAllOrders(@PathVariable UUID userUuid) {
+    public List<Order> getAllOrders(@PathVariable UUID userUuid, @RequestParam(name = "asset", required = false) String assetSymbol) {
         userRepository.findByUuid(userUuid)
                 .orElseThrow(() -> new ResourceNotFoundException(User.class, userUuid));
+
+        if (assetSymbol != null) {
+            assetRepository.findBySymbol(assetSymbol)
+                    .orElseThrow(() -> new ResourceNotFoundException(Asset.class, assetSymbol));
+            return repository.findByUserUuidAndAssetSymbol(userUuid, assetSymbol);
+        }
+
         return repository.findByUserUuid(userUuid);
+    }
+
+    @GetMapping("/asset-holdings")
+    @PreAuthorize("#userUuid == authentication.principal.user.uuid")
+    public List<AssetHoldingResponse> getAssetHoldings(@PathVariable UUID userUuid, @RequestParam(name = "asset", required = false) String assetSymbol) {
+        userRepository.findByUuid(userUuid)
+                .orElseThrow(() -> new ResourceNotFoundException(User.class, userUuid));
+
+        if (assetSymbol != null) {
+            assetRepository.findBySymbol(assetSymbol)
+                    .orElseThrow(() -> new ResourceNotFoundException(Asset.class, assetSymbol));
+            return repository.findAssetHoldingsByUserUuidAndAssetSymbol(userUuid, assetSymbol);
+        }
+
+        return repository.findAssetHoldingsByUserUuid(userUuid);
     }
 
     @GetMapping("/orders/{uuid}")

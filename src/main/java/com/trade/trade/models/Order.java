@@ -25,6 +25,10 @@ public class Order extends Model {
     @NotNull private long brokerage;
     @Enumerated(EnumType.ORDINAL) @NotNull private Direction direction;
 
+    public long getSubTotal() {
+        return this.quantity * this.price;
+    }
+
     public long getTotal() {
         if (this.direction == Direction.BUY) {
             return (this.quantity * this.price) + this.brokerage;

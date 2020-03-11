@@ -36,6 +36,11 @@ public class UserController {
         return ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
     }
 
+    @GetMapping("/user/balance")
+    public long getCurrentUsersBalance() {
+        return transactionRepository.findBalanceByUserUuid(((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser().getUuid());
+    }
+
     @GetMapping("/users")
     public List<User> getAllUsers() {
         return repository.findAll();
