@@ -28,10 +28,10 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZWlsbGV5Z
 
 POST http://localhost:8080/stocks
 Content-Type: application/json
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZWlsbGV5Z3JheUBnbWFpbC5jb20iLCJleHAiOjE1ODQ3MDMzNDF9.QG4EZ5w4JaOV0lv2UxowAk5kc_7kM0p86SF_j5GpcXRUPfEv6wLGeQwFJVPjQ4dRriNqP0P7iqrBUaYz6CQZtQ
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZWlsbGV5Z3JheUBnbWFpbC5jb20iLCJleHAiOjE1ODQ3OTA3NjN9.vxRu9bScsluIHHkLld-MAqoybWpx4zAuTc_ro7FONXziq5qZ3_dskgow7dMI-CVm-Ygv5jjg3eBjXzzJH5Wycg
 
 {
-  "symbol": "NVDA"
+  "symbol": "TSLA"
 }
 
 ###

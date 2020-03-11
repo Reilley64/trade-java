@@ -15,15 +15,15 @@ public interface OrderRepository extends Repository<Order, Long> {
 
     Optional<Order> findByUserUuidAndUuid(UUID uuid, UUID userUuid);
 
-    @Query("SELECT new com.trade.trade.datatransferobjects.AssetHoldingResponse(a.symbol, SUM(CASE WHEN o.direction = 0 THEN o.quantity ELSE -o.quantity END))" +
+    @Query("SELECT new com.trade.trade.datatransferobjects.AssetHoldingResponse(a, SUM(CASE WHEN o.direction = 0 THEN o.quantity ELSE -o.quantity END))" +
             " FROM Order o INNER JOIN Asset a ON o.asset = a" +
             " WHERE o.user.uuid = ?1" +
-            " GROUP BY a.symbol")
+            " GROUP BY a")
     List<AssetHoldingResponse> findAssetHoldingsByUserUuid(UUID userUuid);
 
-    @Query("SELECT new com.trade.trade.datatransferobjects.AssetHoldingResponse(a.symbol, SUM(CASE WHEN o.direction = 0 THEN o.quantity ELSE -o.quantity END))" +
+    @Query("SELECT new com.trade.trade.datatransferobjects.AssetHoldingResponse(a, SUM(CASE WHEN o.direction = 0 THEN o.quantity ELSE -o.quantity END))" +
             " FROM Order o INNER JOIN Asset a ON o.asset = a" +
             " WHERE o.user.uuid = ?1 AND a.symbol = ?2" +
-            " GROUP BY a.symbol")
+            " GROUP BY a")
     List<AssetHoldingResponse> findAssetHoldingsByUserUuidAndAssetSymbol(UUID userUuid, String assetSymbol);
 }
