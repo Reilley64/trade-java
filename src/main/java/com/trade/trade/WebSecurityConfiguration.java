@@ -1,9 +1,9 @@
 package com.trade.trade;
 
-import com.trade.trade.repositories.UserRepository;
-import com.trade.trade.security.JWTAuthenticationFilter;
-import com.trade.trade.security.JWTAuthorizationFilter;
-import com.trade.trade.security.UserPrincipalDetailsService;
+import com.trade.trade.api.repositories.UserRepository;
+import com.trade.trade.api.security.JWTAuthenticationFilter;
+import com.trade.trade.api.security.JWTAuthorizationFilter;
+import com.trade.trade.api.security.UserPrincipalDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

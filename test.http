@@ -28,10 +28,22 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZWlsbGV5Z
 
 POST http://localhost:8080/stocks
 Content-Type: application/json
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZWlsbGV5Z3JheUBnbWFpbC5jb20iLCJleHAiOjE1ODQ3OTA3NjN9.vxRu9bScsluIHHkLld-MAqoybWpx4zAuTc_ro7FONXziq5qZ3_dskgow7dMI-CVm-Ygv5jjg3eBjXzzJH5Wycg
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZWlsbGV5Z3JheUBnbWFpbC5jb20iLCJleHAiOjE1OTQxOTE3MjR9.TWkRWzYAmDKkStIA2To5KeV40Pczoicee36CKplw8yfRoFszjiHOC6idujE3uQgW1MP_vlLpiy_WoK5GGwv2nQ
 
 {
   "symbol": "TSLA"
 }
+
+###
+
+GET http://localhost:8080/stocks/TSLA/quote
+Accept: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZWlsbGV5Z3JheUBnbWFpbC5jb20iLCJleHAiOjE1OTQxOTE3MjR9.TWkRWzYAmDKkStIA2To5KeV40Pczoicee36CKplw8yfRoFszjiHOC6idujE3uQgW1MP_vlLpiy_WoK5GGwv2nQ
+
+###
+
+GET http://localhost:8080/assets/TSLA/valuations
+Accept: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZWlsbGV5Z3JheUBnbWFpbC5jb20iLCJleHAiOjE1OTQxOTE3MjR9.TWkRWzYAmDKkStIA2To5KeV40Pczoicee36CKplw8yfRoFszjiHOC6idujE3uQgW1MP_vlLpiy_WoK5GGwv2nQ
 
 ###
