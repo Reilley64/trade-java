@@ -4,13 +4,16 @@ import com.trade.trade.api.repositories.OrderRepository;
 import com.trade.trade.api.repositories.TransactionRepository;
 import com.trade.trade.api.repositories.UserRepository;
 import com.trade.trade.clients.iexcloud.IEXCloudClient;
-import com.trade.trade.domain.datatransferobjects.AssetHoldingResponse;
+import com.trade.trade.domain.datatransferobjects.AssetHolding;
 import com.trade.trade.domain.exceptions.ResourceNotFoundException;
 import com.trade.trade.domain.models.Order;
 import com.trade.trade.domain.models.Transaction;
 import com.trade.trade.domain.models.User;
-import com.trade.trade.domain.models.assets.Asset;
-import com.trade.trade.api.repositories.assets.AssetRepository;
+import com.trade.trade.domain.models.Asset;
+import com.trade.trade.api.repositories.AssetRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +25,8 @@ import java.util.UUID;
 public class OrderController {
     private final OrderRepository repository;
     private final AssetRepository assetRepository;
-    private final UserRepository userRepository;
     private final TransactionRepository transactionRepository;
+    private final UserRepository userRepository;
 
     public OrderController(OrderRepository repository, AssetRepository assetRepository,
                            TransactionRepository transactionRepository, UserRepository userRepository) {
@@ -37,40 +40,41 @@ public class OrderController {
 
     @GetMapping("/orders")
     @PreAuthorize("#userUuid == authentication.principal.user.uuid")
-    public List<Order> getAllOrders(@PathVariable UUID userUuid, @RequestParam(name = "asset", required = false) String assetSymbol) {
-        userRepository.findByUuid(userUuid)
+    public Page<Order> getAllOrders(@PathVariable UUID userUuid, @RequestParam(name = "asset", required = false) String assetSymbol) {
+        User user = userRepository.findByUuid(userUuid)
                 .orElseThrow(() -> new ResourceNotFoundException(User.class, userUuid));
 
         if (assetSymbol != null) {
-            assetRepository.findBySymbol(assetSymbol)
+            Asset asset = assetRepository.findBySymbol(assetSymbol)
                     .orElseThrow(() -> new ResourceNotFoundException(Asset.class, assetSymbol));
-            return repository.findByUserUuidAndAssetSymbol(userUuid, assetSymbol);
+            return repository.findByUserAndAsset(user, asset, PageRequest.of(0, 15, Sort.by("createdAt").descending()));
         }
 
-        return repository.findByUserUuid(userUuid);
+        return repository.findByUser(user, PageRequest.of(0, 15, Sort.by("createdAt").descending()));
     }
 
     @GetMapping("/asset-holdings")
     @PreAuthorize("#userUuid == authentication.principal.user.uuid")
-    public List<AssetHoldingResponse> getAssetHoldings(@PathVariable UUID userUuid, @RequestParam(name = "asset", required = false) String assetSymbol) {
-        userRepository.findByUuid(userUuid)
+    public Page<AssetHolding> getAssetHoldings(@PathVariable UUID userUuid, @RequestParam(name = "asset", required = false) String assetSymbol,
+                                               @RequestParam(name = "page") Integer page, @RequestParam(name = "limit") Integer limit) {
+        User user = userRepository.findByUuid(userUuid)
                 .orElseThrow(() -> new ResourceNotFoundException(User.class, userUuid));
 
         if (assetSymbol != null) {
-            assetRepository.findBySymbol(assetSymbol)
+            Asset asset = assetRepository.findBySymbol(assetSymbol)
                     .orElseThrow(() -> new ResourceNotFoundException(Asset.class, assetSymbol));
-            return repository.findAssetHoldingsByUserUuidAndAssetSymbol(userUuid, assetSymbol);
+            return repository.findAssetHoldingsByUserAndAsset(user, asset, PageRequest.of(page, limit));
         }
 
-        return repository.findAssetHoldingsByUserUuid(userUuid);
+        return repository.findAssetHoldingsByUserOrderByAssetSymbol(user, PageRequest.of(page, limit));
     }
 
     @GetMapping("/orders/{uuid}")
     @PreAuthorize("#userUuid == authentication.principal.user.uuid")
     public Order getOrderByUuid(@PathVariable UUID userUuid, @PathVariable UUID uuid) {
-        userRepository.findByUuid(userUuid)
+        User user = userRepository.findByUuid(userUuid)
                 .orElseThrow(() -> new ResourceNotFoundException(User.class, userUuid));
-        return repository.findByUserUuidAndUuid(uuid, userUuid)
+        return repository.findByUuidAndUser(uuid, user)
                 .orElseThrow(() -> new ResourceNotFoundException(Order.class, uuid));
     }
 
@@ -84,7 +88,6 @@ public class OrderController {
                         .orElseThrow(() -> new ResourceNotFoundException(Asset.class, order.getAsset().getUuid()))));
         order.setPrice((long) (iexCloudClient.getStockQuote(order.getAsset()).getLatestPrice() * 100));
         order.setBrokerage(2000);
-        repository.save(order);
 
         if (transactionRepository.findBalanceByUserUuid(order.getUser().getUuid()) < order.getTotal()) throw new RuntimeException();
         Transaction transaction = new Transaction();
@@ -99,8 +102,8 @@ public class OrderController {
             transaction.setDescription("Buy " + order.getAsset().getSymbol());
             transaction.setDirection(Transaction.Direction.CREDIT);
         }
-        transactionRepository.save(transaction);
+        order.setTransaction(transaction);
 
-        return order;
+        return repository.save(order);
     }
 }

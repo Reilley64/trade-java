@@ -3,10 +3,8 @@ package com.trade.trade.api.controllers;
 import com.trade.trade.domain.exceptions.ResourceNotFoundException;
 import com.trade.trade.domain.models.Transaction;
 import com.trade.trade.domain.models.User;
-import com.trade.trade.domain.models.UserValuation;
 import com.trade.trade.api.repositories.TransactionRepository;
 import com.trade.trade.api.repositories.UserRepository;
-import com.trade.trade.api.repositories.UserValuationRepository;
 import com.trade.trade.api.security.UserPrincipal;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,14 +18,12 @@ import java.util.UUID;
 public class UserController {
     private final UserRepository repository;
     private final TransactionRepository transactionRepository;
-    private final UserValuationRepository userValuationRepository;
     private final PasswordEncoder passwordEncoder;
 
     public UserController(UserRepository repository, TransactionRepository transactionRepository,
-                          UserValuationRepository userValuationRepository, PasswordEncoder passwordEncoder) {
+                          PasswordEncoder passwordEncoder) {
         this.repository = repository;
         this.transactionRepository = transactionRepository;
-        this.userValuationRepository = userValuationRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -63,11 +59,6 @@ public class UserController {
         transaction.setDescription("Initial account credit");
         transaction.setValue(100000000);
         transactionRepository.save(transaction);
-
-        UserValuation userValuation = new UserValuation();
-        userValuation.setUser(user);
-        userValuation.setValue(transactionRepository.findBalanceByUserUuid(user.getUuid()));
-        userValuationRepository.save(userValuation);
 
         return user;
     }

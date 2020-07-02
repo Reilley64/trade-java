@@ -21,5 +21,6 @@ public class Transaction extends Model {
     @NotNull private long value;
     @NotNull private String description;
     @NotNull private Direction direction;
+
     @ManyToOne @JsonIgnore @NotNull private User user;
 }

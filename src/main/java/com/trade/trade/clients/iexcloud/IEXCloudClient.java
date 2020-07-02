@@ -3,7 +3,7 @@ package com.trade.trade.clients.iexcloud;
 import com.trade.trade.clients.iexcloud.objects.IEXStockHistoricalPrice;
 import com.trade.trade.clients.iexcloud.objects.IEXStockProfile;
 import com.trade.trade.clients.iexcloud.objects.IEXStockQuote;
-import com.trade.trade.domain.models.assets.Asset;
+import com.trade.trade.domain.models.Asset;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;

@@ -1,8 +1,6 @@
 package com.trade.trade.domain.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.trade.trade.domain.models.assets.Asset;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,12 +16,14 @@ public class Order extends Model {
         BUY, SELL;
     }
 
-    @ManyToOne @NotNull private Asset asset;
-    @ManyToOne @JsonIgnore @NotNull private User user;
     @NotNull private long quantity;
     @NotNull private long price;
     @NotNull private long brokerage;
     @Enumerated(EnumType.ORDINAL) @NotNull private Direction direction;
+
+    @ManyToOne @NotNull private Asset asset;
+    @OneToOne(cascade = CascadeType.ALL) @NotNull private Transaction transaction;
+    @ManyToOne @JsonIgnore @NotNull private User user;
 
     public long getSubTotal() {
         return this.quantity * this.price;
@@ -34,15 +34,5 @@ public class Order extends Model {
             return (this.quantity * this.price) + this.brokerage;
         }
         return (this.quantity * this.price) - this.brokerage;
-    }
-
-    @JsonIgnore
-    public User getUser() {
-        return user;
-    }
-
-    @JsonProperty
-    public void setUser(User user) {
-        this.user = user;
     }
 }

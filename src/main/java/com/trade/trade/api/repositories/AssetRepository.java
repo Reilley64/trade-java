@@ -1,6 +1,6 @@
-package com.trade.trade.api.repositories.assets;
+package com.trade.trade.api.repositories;
 
-import com.trade.trade.domain.models.assets.Asset;
+import com.trade.trade.domain.models.Asset;
 import com.trade.trade.api.repositories.Repository;
 
 import java.util.Optional;

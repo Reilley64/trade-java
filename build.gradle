@@ -19,7 +19,8 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.auth0:java-jwt:3.10.0'
+    implementation 'com.auth0:java-jwt:3.10.3'
+    implementation 'com.vladmihalcea:hibernate-types-52:2.9.12'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-batch'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

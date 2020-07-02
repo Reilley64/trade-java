@@ -1,7 +1,6 @@
 package com.trade.trade.domain.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.trade.trade.domain.models.assets.Asset;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -22,5 +21,6 @@ public class AssetValuation extends Model {
     @NotNull private long high;
     @NotNull private long low;
     @NotNull private long volume;
+
     @ManyToOne @JsonIgnore @NotNull private Asset asset;
 }
