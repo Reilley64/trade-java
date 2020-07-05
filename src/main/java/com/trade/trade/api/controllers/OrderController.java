@@ -39,17 +39,18 @@ public class OrderController {
 
     @GetMapping("/orders")
     @PreAuthorize("#userUuid == authentication.principal.user.uuid")
-    public Page<Order> getAllOrders(@PathVariable UUID userUuid, @RequestParam(name = "asset", required = false) String assetSymbol) {
+    public Page<Order> getAllOrders(@RequestParam(name = "page") Integer page, @RequestParam(name = "size") Integer size,
+                                    @PathVariable UUID userUuid, @RequestParam(name = "asset", required = false) String assetSymbol) {
         User user = userRepository.findByUuid(userUuid)
                 .orElseThrow(() -> new ResourceNotFoundException(User.class, userUuid));
 
         if (assetSymbol != null) {
             Asset asset = assetRepository.findBySymbol(assetSymbol)
                     .orElseThrow(() -> new ResourceNotFoundException(Asset.class, assetSymbol));
-            return repository.findByUserAndAsset(user, asset, PageRequest.of(0, 15, Sort.by("createdAt").descending()));
+            return repository.findByUserAndAsset(user, asset, PageRequest.of(page, size, Sort.by("createdAt").descending()));
         }
 
-        return repository.findByUser(user, PageRequest.of(0, 15, Sort.by("createdAt").descending()));
+        return repository.findByUser(user, PageRequest.of(page, size, Sort.by("createdAt").descending()));
     }
 
     @GetMapping("/asset-holdings")

@@ -8,10 +8,7 @@ import com.trade.trade.domain.models.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -27,9 +24,10 @@ public class TransactionController {
     }
 
     @GetMapping("/transactions")
-    public Page<Transaction> getAllTransactions(@PathVariable UUID userUuid) {
+    public Page<Transaction> getAllTransactions(@RequestParam(name = "page") Integer page, @RequestParam(name = "size") Integer size,
+                                                @PathVariable UUID userUuid) {
         User user = userRepository.findByUuid(userUuid)
                 .orElseThrow(() -> new ResourceNotFoundException(User.class, userUuid));
-        return repository.findByUser(user, PageRequest.of(0, 10, Sort.by("createdAt").descending()));
+        return repository.findByUser(user, PageRequest.of(page, size, Sort.by("createdAt").descending()));
     }
 }

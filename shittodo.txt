@@ -3,6 +3,6 @@ refactor asset holdings
 user leaderboard
 user profiles
 user settings
-table pagination
 refactor user balance
 empty graph alternatives
+api security
