@@ -23,8 +23,7 @@ public class User extends Model {
     @NotEmpty private String password;
     @NotEmpty private String firstName;
     @NotEmpty private String lastName;
-
-    @NotNull @Enumerated(EnumType.ORDINAL) private Role role = Role.USER;
+    @NotNull @Enumerated(EnumType.STRING) private Role role = Role.USER;
 
     public String getName() {
         return firstName + " " + lastName;

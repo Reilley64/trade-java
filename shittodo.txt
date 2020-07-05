@@ -4,4 +4,5 @@ user leaderboard
 user profiles
 user settings
 table pagination
-t
+refactor user balance
+empty graph alternatives

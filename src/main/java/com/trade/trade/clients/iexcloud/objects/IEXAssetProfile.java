@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class IEXStockProfile {
+public class IEXAssetProfile {
     private String symbol;
     private String companyName;
     private String exchange;

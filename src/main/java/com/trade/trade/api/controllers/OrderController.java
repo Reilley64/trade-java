@@ -17,7 +17,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -86,7 +85,7 @@ public class OrderController {
         order.setAsset(assetRepository.findByUuid(order.getAsset().getUuid())
                 .orElse(assetRepository.findBySymbol(order.getAsset().getSymbol())
                         .orElseThrow(() -> new ResourceNotFoundException(Asset.class, order.getAsset().getUuid()))));
-        order.setPrice((long) (iexCloudClient.getStockQuote(order.getAsset()).getLatestPrice() * 100));
+        order.setPrice((long) (iexCloudClient.getAssetQuote(order.getAsset()).getLatestPrice() * 100));
         order.setBrokerage(2000);
 
         if (transactionRepository.findBalanceByUserUuid(order.getUser().getUuid()) < order.getTotal()) throw new RuntimeException();

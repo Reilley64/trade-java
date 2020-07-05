@@ -68,7 +68,6 @@ public class UserController {
     public User updateUser(@PathVariable UUID uuid, @RequestBody User newUser) {
         return repository.findByUuid(uuid)
                 .map(user -> {
-                    user.setUsername(newUser.getUsername());
                     user.setPassword(passwordEncoder.encode(newUser.getPassword()));
                     user.setFirstName(newUser.getFirstName());
                     user.setLastName(newUser.getLastName());

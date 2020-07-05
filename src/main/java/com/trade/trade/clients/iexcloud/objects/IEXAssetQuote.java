@@ -3,7 +3,7 @@ package com.trade.trade.clients.iexcloud.objects;
 import lombok.Data;
 
 @Data
-public class IEXStockQuote {
+public class IEXAssetQuote {
     private String calculationPrice;
     private Double open;
     private Long openTime;

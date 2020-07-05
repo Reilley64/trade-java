@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class IEXStockHistoricalPrice {
+public class IEXAssetHistoricalPrice {
     private Date date;
     private Double close;
     private Double open;

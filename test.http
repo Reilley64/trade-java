@@ -2,10 +2,10 @@ POST http://localhost:8080/users
 Content-Type: application/json
 
 {
-  "username": "radfordprivate@gmail.com",
+  "username": "reilleygray@gmail.com",
   "password": "password",
-  "firstName": "Sam",
-  "lastName": "Radford"
+  "firstName": "Reilley",
+  "lastName": "Gray"
 }
 
 ###
@@ -26,13 +26,18 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZWlsbGV5Z
 
 ###
 
-POST http://localhost:8080/stocks
+POST http://localhost:8080/assets
 Content-Type: application/json
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZWlsbGV5Z3JheUBnbWFpbC5jb20iLCJleHAiOjE1OTQ0Njk1NTJ9.zK5Snb-7Fsi38w1basmH95x7HwY9foAxnTM0R2N9SGSI3J2utRrQC_KvmHoFtP1A_s5AWkHaWMFy1uWfJ1BeCQ
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZWlsbGV5Z3JheUBnbWFpbC5jb20iLCJleHAiOjE1OTQ4MDE4MTV9.1edMyp_hULVYVsFsCZs2xe0oSG-cFV7X7WuRAuCHP3uis-NI5O1fEZwWWkffK4kfsNJEVxIwWy8FQvSQuASY4g
 
 {
-  "symbol": "PSX"
+  "symbol": "AAPL"
 }
+
+###
+
+GET http://localhost:8080/assets?query=apple
+Accept: application/json
 
 ###
 

@@ -2,7 +2,7 @@ package com.trade.trade.api.controllers;
 
 import com.trade.trade.api.repositories.AssetRepository;
 import com.trade.trade.clients.iexcloud.IEXCloudClient;
-import com.trade.trade.clients.iexcloud.objects.IEXStockProfile;
+import com.trade.trade.clients.iexcloud.objects.IEXAssetProfile;
 import com.trade.trade.domain.exceptions.ResourceNotFoundException;
 import com.trade.trade.domain.models.Asset;
 import org.springframework.data.domain.Page;
@@ -22,8 +22,10 @@ public class AssetController {
     IEXCloudClient iexCloudClient = new IEXCloudClient();
 
     @GetMapping("/assets")
-    public Page<Asset> getAllAssets() {
-        return repository.findAll(PageRequest.of(0, 16, Sort.by("symbol")));
+    public Page<Asset> getAllAssets(@RequestParam(name = "page") Integer page, @RequestParam(name = "size") Integer size,
+                                    @RequestParam(name = "query", required = false) String query) {
+        if (query != null && !query.isEmpty()) return repository.findByFilter(query, PageRequest.of(0, 16));
+        return repository.findAll(PageRequest.of(page, size, Sort.by("symbol")));
     }
 
     @GetMapping("/assets/{symbol}")
@@ -36,20 +38,20 @@ public class AssetController {
     public long getAssetPriceBySymbol(@PathVariable String symbol) {
         Asset asset = repository.findBySymbol(symbol)
                 .orElseThrow(() -> new ResourceNotFoundException(Asset.class, symbol));
-        return (long) (iexCloudClient.getStockQuote(asset).getLatestPrice() * 100);
+        return (long) (iexCloudClient.getAssetQuote(asset).getLatestPrice() * 100);
     }
 
     @PostMapping("/assets")
     @PreAuthorize("hasAuthority('ADMIN')")
     public Asset createStock(@RequestBody Asset asset) {
-        IEXStockProfile IEXStockProfile = iexCloudClient.getStockProfile(asset);
-        asset.setName(IEXStockProfile.getCompanyName());
+        IEXAssetProfile IEXAssetProfile = iexCloudClient.getAssetProfile(asset);
+        asset.setName(IEXAssetProfile.getCompanyName());
         asset.setImage("https://storage.googleapis.com/iex/api/logos/" + asset.getSymbol() + ".png");
-        asset.setExchange(IEXStockProfile.getExchange());
-        asset.setDescription(IEXStockProfile.getDescription());
-        asset.setIndustry(IEXStockProfile.getIndustry());
-        asset.setSector(IEXStockProfile.getSector());
-        asset.setWebsite(IEXStockProfile.getWebsite());
+        asset.setExchange(IEXAssetProfile.getExchange());
+        asset.setDescription(IEXAssetProfile.getDescription());
+        asset.setIndustry(IEXAssetProfile.getIndustry());
+        asset.setSector(IEXAssetProfile.getSector());
+        asset.setWebsite(IEXAssetProfile.getWebsite());
         return repository.save(asset);
     }
 

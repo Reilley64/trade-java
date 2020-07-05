@@ -3,7 +3,7 @@ package com.trade.trade.api.services;
 import com.trade.trade.api.repositories.AssetValuationRepository;
 import com.trade.trade.api.repositories.AssetRepository;
 import com.trade.trade.clients.iexcloud.IEXCloudClient;
-import com.trade.trade.clients.iexcloud.objects.IEXStockHistoricalPrice;
+import com.trade.trade.clients.iexcloud.objects.IEXAssetHistoricalPrice;
 import com.trade.trade.domain.models.AssetValuation;
 import com.trade.trade.domain.models.Asset;
 import org.springframework.stereotype.Service;
@@ -29,8 +29,8 @@ public class AssetValuationService {
         Optional<AssetValuation> lastAssetValuation = repository.findFirstByAssetOrderByDateDesc(asset);
 
         if (lastAssetValuation.isEmpty()) {
-            IEXStockHistoricalPrice[] historicalPrices = iexCloudClient.getStockHistoricalPrices(asset);
-            for (IEXStockHistoricalPrice historicalPrice : historicalPrices) {
+            IEXAssetHistoricalPrice[] historicalPrices = iexCloudClient.getAssetHistoricalPrices(asset);
+            for (IEXAssetHistoricalPrice historicalPrice : historicalPrices) {
                 AssetValuation assetValuation = new AssetValuation();
                 assetValuation.setDate(historicalPrice.getDate());
                 assetValuation.setOpen((long) (historicalPrice.getOpen() * 100));
@@ -56,9 +56,9 @@ public class AssetValuationService {
             List<LocalDate> datesUntilPresent = lastZonedRecordedDate.plusDays(1).toLocalDate().datesUntil(currentZonedDate.toLocalDate()).collect(Collectors.toList());
             for (LocalDate localDate : datesUntilPresent) {
                 if (!(localDate.getDayOfWeek() == DayOfWeek.SATURDAY || localDate.getDayOfWeek() == DayOfWeek.SUNDAY)) {
-                    IEXStockHistoricalPrice[] historicalPrices = iexCloudClient.getStockHistoricalPrices(asset, localDate);
+                    IEXAssetHistoricalPrice[] historicalPrices = iexCloudClient.getAssetHistoricalPrices(asset, localDate);
                     if (historicalPrices.length != 0) {
-                        IEXStockHistoricalPrice historicalPrice = historicalPrices[0];
+                        IEXAssetHistoricalPrice historicalPrice = historicalPrices[0];
                         AssetValuation assetValuation = new AssetValuation();
                         assetValuation.setDate(historicalPrice.getDate());
                         assetValuation.setOpen((long) (historicalPrice.getOpen() * 100));

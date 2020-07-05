@@ -16,12 +16,12 @@ import java.util.List;
 public class Asset extends Model {
     @Column(unique = true) @NotEmpty private String symbol;
     @NotEmpty private String name;
-    @Column(columnDefinition = "text") @NotEmpty private String description;
+    @Column(columnDefinition = "text") private String description;
     @NotEmpty private String image;
     @NotEmpty private String exchange;
     @NotEmpty private String industry;
     @NotEmpty private String sector;
-    @NotEmpty private String website;
+    private String website;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "asset") @JsonIgnore private List<AssetValuation> assetValuation = new ArrayList<>();
 }
