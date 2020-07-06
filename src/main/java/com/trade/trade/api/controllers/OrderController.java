@@ -43,30 +43,38 @@ public class OrderController {
                                     @PathVariable UUID userUuid, @RequestParam(name = "asset", required = false) String assetSymbol) {
         User user = userRepository.findByUuid(userUuid)
                 .orElseThrow(() -> new ResourceNotFoundException(User.class, userUuid));
-
-        if (assetSymbol != null) {
-            Asset asset = assetRepository.findBySymbol(assetSymbol)
-                    .orElseThrow(() -> new ResourceNotFoundException(Asset.class, assetSymbol));
-            return repository.findByUserAndAsset(user, asset, PageRequest.of(page, size, Sort.by("createdAt").descending()));
-        }
-
         return repository.findByUser(user, PageRequest.of(page, size, Sort.by("createdAt").descending()));
+    }
+
+    @GetMapping("/orders/{assetUuid}")
+    @PreAuthorize("#userUuid == authentication.principal.user.uuid")
+    public Page<Order> getOrdersByAssetUuid(@PathVariable UUID userUuid, @PathVariable UUID assetUuid,
+                                                   @RequestParam(name = "page") Integer page, @RequestParam(name = "limit") Integer limit) {
+        User user = userRepository.findByUuid(userUuid)
+                .orElseThrow(() -> new ResourceNotFoundException(User.class, userUuid));
+        Asset asset = assetRepository.findByUuid(assetUuid)
+                .orElseThrow(() -> new ResourceNotFoundException(Asset.class, assetUuid));
+        return repository.findByUserAndAsset(user, asset, PageRequest.of(page, limit));
     }
 
     @GetMapping("/asset-holdings")
     @PreAuthorize("#userUuid == authentication.principal.user.uuid")
-    public Page<AssetHolding> getAssetHoldings(@PathVariable UUID userUuid, @RequestParam(name = "asset", required = false) String assetSymbol,
+    public Page<AssetHolding> getAllAssetHoldings(@PathVariable UUID userUuid,
                                                @RequestParam(name = "page") Integer page, @RequestParam(name = "limit") Integer limit) {
         User user = userRepository.findByUuid(userUuid)
                 .orElseThrow(() -> new ResourceNotFoundException(User.class, userUuid));
-
-        if (assetSymbol != null) {
-            Asset asset = assetRepository.findBySymbol(assetSymbol)
-                    .orElseThrow(() -> new ResourceNotFoundException(Asset.class, assetSymbol));
-            return repository.findAssetHoldingsByUserAndAsset(user, asset, PageRequest.of(page, limit));
-        }
-
         return repository.findAssetHoldingsByUserOrderByAssetSymbol(user, PageRequest.of(page, limit));
+    }
+
+    @GetMapping("/asset-holdings/{assetUuid}")
+    @PreAuthorize("#userUuid == authentication.principal.user.uuid")
+    public Page<AssetHolding> getAssetHoldingsByAssetUuid(@PathVariable UUID userUuid, @PathVariable UUID assetUuid,
+                                                          @RequestParam(name = "page") Integer page, @RequestParam(name = "limit") Integer limit) {
+        User user = userRepository.findByUuid(userUuid)
+                .orElseThrow(() -> new ResourceNotFoundException(User.class, userUuid));
+        Asset asset = assetRepository.findByUuid(assetUuid)
+                .orElseThrow(() -> new ResourceNotFoundException(Asset.class, assetUuid));
+        return repository.findAssetHoldingsByUserAndAsset(user, asset, PageRequest.of(page, limit));
     }
 
     @GetMapping("/orders/{uuid}")
@@ -84,8 +92,7 @@ public class OrderController {
         order.setUser(userRepository.findByUuid(userUuid)
                 .orElseThrow(() -> new ResourceNotFoundException(User.class, order.getUser().getUuid())));
         order.setAsset(assetRepository.findByUuid(order.getAsset().getUuid())
-                .orElse(assetRepository.findBySymbol(order.getAsset().getSymbol())
-                        .orElseThrow(() -> new ResourceNotFoundException(Asset.class, order.getAsset().getUuid()))));
+                .orElseThrow(() -> new ResourceNotFoundException(Asset.class, order.getAsset().getUuid())));
         order.setPrice((long) (iexCloudClient.getAssetQuote(order.getAsset()).getLatestPrice() * 100));
         order.setBrokerage(2000);
 

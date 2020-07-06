@@ -6,22 +6,28 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @Entity
 @NoArgsConstructor
-@Table(name = "assets")
+@Table(
+        name = "assets",
+        uniqueConstraints={
+                @UniqueConstraint(columnNames = {"symbol", "exchange_id"})
+        }
+)
 public class Asset extends Model {
-    @Column(unique = true) @NotEmpty private String symbol;
+    @NotEmpty private String symbol;
     @NotEmpty private String name;
     @Column(columnDefinition = "text") private String description;
     @NotEmpty private String image;
-    @NotEmpty private String exchange;
     @NotEmpty private String industry;
     @NotEmpty private String sector;
     private String website;
 
+    @ManyToOne @NotNull Exchange exchange;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "asset") @JsonIgnore private List<AssetValuation> assetValuation = new ArrayList<>();
 }

@@ -7,6 +7,9 @@ import com.trade.trade.domain.models.User;
 import com.trade.trade.domain.models.UserSnapshot;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,9 +25,44 @@ public class UserSnapshotController {
     }
 
     @GetMapping("/snapshots")
-    public List<UserSnapshot> getAllUserSnapshots(@PathVariable UUID userUuid) {
+    public List<UserSnapshot> getAllUserSnapshots(@PathVariable UUID userUuid, @RequestParam(name = "range") String range) {
         User user = userRepository.findByUuid(userUuid)
                 .orElseThrow(() -> new ResourceNotFoundException(User.class, userUuid));
-        return repository.findByUserOrderByCreatedAt(user);
+        switch (range) {
+            case "1m":
+                return repository.findByUserAndCreatedAtBetweenOrderByCreatedAt(
+                        user,
+                        java.util.Date.from(LocalDate.now().minusMonths(1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()),
+                        new Date(System.currentTimeMillis())
+                );
+
+            case "3m":
+                return repository.findByUserAndCreatedAtBetweenOrderByCreatedAt(
+                        user,
+                        java.util.Date.from(LocalDate.now().minusMonths(3).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()),
+                        new Date(System.currentTimeMillis())
+                );
+
+            case "6m":
+                return repository.findByUserAndCreatedAtBetweenOrderByCreatedAt(
+                        user,
+                        java.util.Date.from(LocalDate.now().minusMonths(6).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()),
+                        new Date(System.currentTimeMillis())
+                );
+
+            case "1y":
+                return repository.findByUserAndCreatedAtBetweenOrderByCreatedAt(
+                        user,
+                        java.util.Date.from(LocalDate.now().minusYears(1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()),
+                        new Date(System.currentTimeMillis())
+                );
+
+            default:
+                return repository.findByUserAndCreatedAtBetweenOrderByCreatedAt(
+                        user,
+                        java.util.Date.from(LocalDate.now().minusDays(7).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()),
+                        new Date(System.currentTimeMillis())
+                );
+        }
     }
 }

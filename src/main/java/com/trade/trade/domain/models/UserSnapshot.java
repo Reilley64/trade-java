@@ -18,8 +18,8 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "user_snapshots")
 public class UserSnapshot extends Model {
-    @NotNull private long accountBalance;
-    @NotNull private long accountValue;
+    @NotNull private long balance;
+    @NotNull private long valuation;
     @NotNull @Column(columnDefinition = "jsonb") @Type(type = "jsonb") private List<AssetHolding> assetHoldings;
 
     @ManyToOne @JsonIgnore @NotNull private User user;

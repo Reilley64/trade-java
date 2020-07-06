@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -16,7 +17,7 @@ public class Order extends Model {
         BUY, SELL;
     }
 
-    @NotNull private long quantity;
+    @Min(1) @NotNull private long quantity;
     @NotNull private long price;
     @NotNull private long brokerage;
     @Enumerated(EnumType.ORDINAL) @NotNull private Direction direction;

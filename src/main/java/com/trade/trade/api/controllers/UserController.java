@@ -1,5 +1,7 @@
 package com.trade.trade.api.controllers;
 
+import com.trade.trade.api.repositories.UserSnapshotRepository;
+import com.trade.trade.api.services.UserSnapshotService;
 import com.trade.trade.domain.exceptions.ResourceNotFoundException;
 import com.trade.trade.domain.models.Transaction;
 import com.trade.trade.domain.models.User;
@@ -18,12 +20,17 @@ import java.util.UUID;
 public class UserController {
     private final UserRepository repository;
     private final TransactionRepository transactionRepository;
+    private final UserSnapshotRepository userSnapshotRepository;
+    private final UserSnapshotService userSnapshotService;
     private final PasswordEncoder passwordEncoder;
 
     public UserController(UserRepository repository, TransactionRepository transactionRepository,
+                          UserSnapshotRepository userSnapshotRepository, UserSnapshotService userSnapshotService,
                           PasswordEncoder passwordEncoder) {
         this.repository = repository;
         this.transactionRepository = transactionRepository;
+        this.userSnapshotRepository = userSnapshotRepository;
+        this.userSnapshotService = userSnapshotService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -59,6 +66,8 @@ public class UserController {
         transaction.setDescription("Initial account credit");
         transaction.setValue(100000000);
         transactionRepository.save(transaction);
+
+        userSnapshotRepository.save(userSnapshotService.createSnapshotForUser(user));
 
         return user;
     }

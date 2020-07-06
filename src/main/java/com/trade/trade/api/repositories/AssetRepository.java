@@ -2,6 +2,7 @@ package com.trade.trade.api.repositories;
 
 import com.trade.trade.domain.models.Asset;
 import com.trade.trade.api.repositories.Repository;
+import com.trade.trade.domain.models.Exchange;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -10,9 +11,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AssetRepository extends Repository<Asset, Long> {
-    Optional<Asset> findBySymbol(String symbol);
+    Optional<Asset> findBySymbolAndExchange(String symbol, Exchange exchange);
 
-    boolean existsBySymbol(String symbol);
+    boolean existsBySymbolAndExchange(String symbol, Exchange exchange);
 
     @Query(
             value = "SELECT a.* "

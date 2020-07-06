@@ -12,7 +12,7 @@ public class IEXAssetSymbol {
     String iexId;
     String region;
     String currency;
-    boolean isEnabled;
+    Boolean isEnabled;
     String figi;
     String cik;
 }

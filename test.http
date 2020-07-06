@@ -2,10 +2,10 @@ POST http://localhost:8080/users
 Content-Type: application/json
 
 {
-  "username": "reilleygray@gmail.com",
+  "username": "sam@gmail.com",
   "password": "password",
-  "firstName": "Reilley",
-  "lastName": "Gray"
+  "firstName": "Sam",
+  "lastName": "Radford"
 }
 
 ###

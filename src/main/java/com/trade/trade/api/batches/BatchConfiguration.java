@@ -4,6 +4,7 @@ import com.trade.trade.api.batches.processors.UserSnapshotItemProcessor;
 import com.trade.trade.api.repositories.*;
 import com.trade.trade.api.repositories.AssetRepository;
 import com.trade.trade.api.services.AssetValuationService;
+import com.trade.trade.api.services.UserSnapshotService;
 import com.trade.trade.domain.models.User;
 import com.trade.trade.domain.models.UserSnapshot;
 import org.springframework.batch.core.Job;
@@ -28,28 +29,17 @@ public class BatchConfiguration {
     public final JobBuilderFactory jobBuilderFactory;
     public final StepBuilderFactory stepBuilderFactory;
 
-    private final AssetRepository assetRepository;
-    private final AssetValuationRepository assetValuationRepository;
-    private final AssetValuationService assetValuationService;
-    private final OrderRepository orderRepository;
-    private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
     private final UserSnapshotRepository userSnapshotRepository;
+    private final UserSnapshotService userSnapshotService;
 
     public BatchConfiguration(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory,
-                              AssetRepository assetRepository, AssetValuationRepository assetValuationRepository,
-                              AssetValuationService assetValuationService, OrderRepository orderRepository,
-                              TransactionRepository transactionRepository, UserRepository userRepository,
-                              UserSnapshotRepository userSnapshotRepository) {
+                              UserRepository userRepository, UserSnapshotRepository userSnapshotRepository, UserSnapshotService userSnapshotService) {
         this.jobBuilderFactory = jobBuilderFactory;
         this.stepBuilderFactory = stepBuilderFactory;
-        this.assetRepository = assetRepository;
-        this.assetValuationRepository = assetValuationRepository;
-        this.assetValuationService = assetValuationService;
-        this.orderRepository = orderRepository;
-        this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
         this.userSnapshotRepository = userSnapshotRepository;
+        this.userSnapshotService = userSnapshotService;
     }
 
     @Bean
@@ -67,7 +57,7 @@ public class BatchConfiguration {
 
     @Bean
     public UserSnapshotItemProcessor processor() {
-        return new UserSnapshotItemProcessor(assetRepository, assetValuationRepository, assetValuationService, orderRepository, transactionRepository);
+        return new UserSnapshotItemProcessor(userSnapshotService);
     }
 
     @Bean
