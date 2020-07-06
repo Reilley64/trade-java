@@ -14,9 +14,15 @@ POST http://localhost:8080/login
 Content-Type: application/json
 
 {
-  "username": "reilleygray@gmail.com",
+  "username": "sam@gmail.com",
   "password": "password"
 }
+
+###
+
+GET http://localhost:8080/users?page=0&size=15
+Accept: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYW1AZ21haWwuY29tIiwiZXhwIjoxNTk0OTAyNTk4fQ.jBB5Z3acqhwBep9mhsVbIr_8GPnK-eENh7cl_Q-8VSi6KacIc3CdxENRJo2U3Mkioq-naewtwMDPrtPWlXF6MA
 
 ###
 

@@ -1,4 +1,3 @@
-user leaderboard
 user profiles
 user settings
 refactor user balance

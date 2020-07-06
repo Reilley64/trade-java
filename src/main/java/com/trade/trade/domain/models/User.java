@@ -4,11 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JoinFormula;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -24,6 +27,13 @@ public class User extends Model {
     @NotEmpty private String firstName;
     @NotEmpty private String lastName;
     @NotNull @Enumerated(EnumType.STRING) private Role role = Role.USER;
+
+    @JoinFormula("(SELECT us.id"
+            + " FROM user_snapshots us"
+            + " WHERE us.user_id = id"
+            + " ORDER BY us.created_at DESC"
+            + " LIMIT 1)")
+    @ManyToOne UserSnapshot latestSnapshot;
 
     public String getName() {
         return firstName + " " + lastName;

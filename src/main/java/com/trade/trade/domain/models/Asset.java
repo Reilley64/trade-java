@@ -29,5 +29,5 @@ public class Asset extends Model {
     private String website;
 
     @ManyToOne @NotNull Exchange exchange;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "asset") @JsonIgnore private List<AssetValuation> assetValuation = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "asset") @JsonIgnore private List<AssetValuation> assetValuations = new ArrayList<>();
 }

@@ -1,6 +1,5 @@
 package com.trade.trade;
 
-import com.trade.trade.api.controllers.AssetController;
 import com.trade.trade.api.repositories.ExchangeRepository;
 import com.trade.trade.api.services.AssetService;
 import com.trade.trade.clients.iexcloud.IEXCloudClient;

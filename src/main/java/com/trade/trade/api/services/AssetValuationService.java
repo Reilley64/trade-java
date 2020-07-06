@@ -39,7 +39,7 @@ public class AssetValuationService {
                 assetValuation.setLow((long) (historicalPrice.getLow() * 100));
                 assetValuation.setVolume(historicalPrice.getVolume());
                 assetValuation.setAsset(asset);
-                asset.getAssetValuation().add(assetValuation);
+                asset.getAssetValuations().add(assetValuation);
             }
             assetRepository.save(asset);
             return;
@@ -67,7 +67,7 @@ public class AssetValuationService {
                         assetValuation.setLow((long) (historicalPrice.getLow() * 100));
                         assetValuation.setVolume(historicalPrice.getVolume());
                         assetValuation.setAsset(asset);
-                        asset.getAssetValuation().add(assetValuation);
+                        asset.getAssetValuations().add(assetValuation);
                     }
                 }
             }

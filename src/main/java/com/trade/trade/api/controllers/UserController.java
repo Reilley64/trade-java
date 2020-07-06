@@ -8,12 +8,14 @@ import com.trade.trade.domain.models.User;
 import com.trade.trade.api.repositories.TransactionRepository;
 import com.trade.trade.api.repositories.UserRepository;
 import com.trade.trade.api.security.UserPrincipal;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -45,8 +47,8 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return repository.findAll();
+    public Page<User> getAllUsers(@RequestParam(name = "page") Integer page, @RequestParam(name = "size") Integer size) {
+        return repository.findAll(PageRequest.of(page, size, Sort.by("latestSnapshot.valuation").descending()));
     }
 
     @GetMapping("/users/{uuid}")
