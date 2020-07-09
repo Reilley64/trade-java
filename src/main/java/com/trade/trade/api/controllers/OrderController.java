@@ -24,18 +24,19 @@ import java.util.UUID;
 public class OrderController {
     private final OrderRepository repository;
     private final AssetRepository assetRepository;
+    private final IEXCloudClient iexCloudClient;
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
 
     public OrderController(OrderRepository repository, AssetRepository assetRepository,
-                           TransactionRepository transactionRepository, UserRepository userRepository) {
+                           IEXCloudClient iexCloudClient, TransactionRepository transactionRepository,
+                           UserRepository userRepository) {
         this.repository = repository;
         this.assetRepository = assetRepository;
+        this.iexCloudClient = iexCloudClient;
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
     }
-
-    IEXCloudClient iexCloudClient = new IEXCloudClient();
 
     @GetMapping("/orders")
     @PreAuthorize("#userUuid == authentication.principal.user.uuid")

@@ -17,13 +17,13 @@ import java.util.stream.Collectors;
 public class AssetValuationService {
     private final AssetValuationRepository repository;
     private final AssetRepository assetRepository;
+    private final IEXCloudClient iexCloudClient;
 
-    public AssetValuationService(AssetValuationRepository repository, AssetRepository assetRepository) {
+    public AssetValuationService(AssetValuationRepository repository, AssetRepository assetRepository, IEXCloudClient iexCloudClient) {
         this.repository = repository;
         this.assetRepository = assetRepository;
+        this.iexCloudClient = iexCloudClient;
     }
-
-    IEXCloudClient iexCloudClient = new IEXCloudClient();
 
     public void updateAssetValuations(Asset asset) {
         Optional<AssetValuation> lastAssetValuation = repository.findFirstByAssetOrderByDateDesc(asset);

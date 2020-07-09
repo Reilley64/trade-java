@@ -13,13 +13,13 @@ import org.springframework.stereotype.Service;
 public class AssetService {
     private final AssetRepository repository;
     private final ExchangeRepository exchangeRepository;
+    private final IEXCloudClient iexCloudClient;
 
-    public AssetService(AssetRepository repository, ExchangeRepository exchangeRepository) {
+    public AssetService(AssetRepository repository, ExchangeRepository exchangeRepository, IEXCloudClient iexCloudClient) {
         this.repository = repository;
         this.exchangeRepository = exchangeRepository;
+        this.iexCloudClient = iexCloudClient;
     }
-
-    IEXCloudClient iexCloudClient = new IEXCloudClient();
 
     public void createAsset(Asset asset) {
         IEXAssetProfile iexAssetProfile = iexCloudClient.getAssetProfile(asset);

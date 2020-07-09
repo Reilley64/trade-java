@@ -18,13 +18,13 @@ import java.util.stream.Stream;
 public class DemoData {
     private final AssetService assetService;
     private final ExchangeRepository exchangeRepository;
+    private final IEXCloudClient iexCloudClient;
 
-    public DemoData(AssetService assetService, ExchangeRepository exchangeRepository) {
+    public DemoData(AssetService assetService, ExchangeRepository exchangeRepository, IEXCloudClient iexCloudClient) {
         this.assetService = assetService;
         this.exchangeRepository = exchangeRepository;
+        this.iexCloudClient = iexCloudClient;
     }
-
-    IEXCloudClient iexCloudClient = new IEXCloudClient();
 
     @EventListener
     public void appReady(ApplicationReadyEvent event) {

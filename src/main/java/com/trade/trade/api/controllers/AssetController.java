@@ -17,13 +17,13 @@ import java.util.UUID;
 public class AssetController {
     private final AssetRepository repository;
     private final ExchangeRepository exchangeRepository;
+    private final IEXCloudClient iexCloudClient;
 
-    public AssetController(AssetRepository repository, ExchangeRepository exchangeRepository) {
+    public AssetController(AssetRepository repository, ExchangeRepository exchangeRepository, IEXCloudClient iexCloudClient) {
         this.repository = repository;
         this.exchangeRepository = exchangeRepository;
+        this.iexCloudClient = iexCloudClient;
     }
-
-    IEXCloudClient iexCloudClient = new IEXCloudClient();
 
     @GetMapping("/assets")
     public Page<Asset> getAllAssets(@RequestParam(name = "page") Integer page, @RequestParam(name = "size") Integer size,
