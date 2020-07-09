@@ -2,8 +2,10 @@ package com.trade.trade.clients.iexcloud;
 
 import com.trade.trade.api.repositories.ReferenceDataRepository;
 import com.trade.trade.clients.iexcloud.objects.*;
+import com.trade.trade.domain.exceptions.ResourceNotFoundException;
 import com.trade.trade.domain.models.Asset;
 import com.trade.trade.domain.models.Exchange;
+import com.trade.trade.domain.models.ReferenceData;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,7 +23,7 @@ public class IEXCloudClient {
     private final String base = "https://cloud.iexapis.com/stable";
 
     private String getToken() {
-        return "?token=" + referenceDataRepository.findByKey("iex-cloud-api-token");
+        return "?token=" + referenceDataRepository.findByKey("iex-cloud-api-token").orElseThrow(() -> new ResourceNotFoundException(ReferenceData.class, "iex-cloud-api-token")).getValue();
     }
 
     public IEXAssetHistoricalPrice[] getAssetHistoricalPrices(Asset asset) {
