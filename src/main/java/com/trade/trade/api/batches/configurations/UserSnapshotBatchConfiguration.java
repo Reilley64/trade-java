@@ -32,7 +32,8 @@ public class UserSnapshotBatchConfiguration {
     private final UserSnapshotService userSnapshotService;
 
     public UserSnapshotBatchConfiguration(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory,
-                                          UserRepository userRepository, UserSnapshotRepository userSnapshotRepository, UserSnapshotService userSnapshotService) {
+                                          UserRepository userRepository, UserSnapshotRepository userSnapshotRepository,
+                                          UserSnapshotService userSnapshotService) {
         this.jobBuilderFactory = jobBuilderFactory;
         this.stepBuilderFactory = stepBuilderFactory;
         this.userRepository = userRepository;
@@ -68,7 +69,7 @@ public class UserSnapshotBatchConfiguration {
 
     @Bean
     public Job userSnapshotBatchJob(Step userSnapshotBatchChunk) {
-        return jobBuilderFactory.get("userSnapshotJob")
+        return jobBuilderFactory.get("userSnapshotBatchJob")
                 .incrementer(new RunIdIncrementer())
                 .flow(userSnapshotBatchChunk)
                 .end()
@@ -77,7 +78,7 @@ public class UserSnapshotBatchConfiguration {
 
     @Bean
     public Step userSnapshotBatchChunk(RepositoryItemWriter<UserSnapshot> userSnapshotBatchWriter) {
-        return stepBuilderFactory.get("processStep")
+        return stepBuilderFactory.get("userSnapshotBatchChunk")
                 .<User, UserSnapshot> chunk(10)
                 .reader(userSnapshotBatchReader())
                 .processor(userSnapshotBatchProcessor())
