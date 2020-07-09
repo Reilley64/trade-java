@@ -1,9 +1,7 @@
-package com.trade.trade.api.batches;
+package com.trade.trade.api.batches.configurations;
 
 import com.trade.trade.api.batches.processors.UserSnapshotItemProcessor;
 import com.trade.trade.api.repositories.*;
-import com.trade.trade.api.repositories.AssetRepository;
-import com.trade.trade.api.services.AssetValuationService;
 import com.trade.trade.api.services.UserSnapshotService;
 import com.trade.trade.domain.models.User;
 import com.trade.trade.domain.models.UserSnapshot;
@@ -25,7 +23,7 @@ import java.util.HashMap;
 
 @Configuration
 @EnableBatchProcessing
-public class BatchConfiguration {
+public class UserSnapshotBatchConfiguration {
     public final JobBuilderFactory jobBuilderFactory;
     public final StepBuilderFactory stepBuilderFactory;
 
@@ -33,8 +31,8 @@ public class BatchConfiguration {
     private final UserSnapshotRepository userSnapshotRepository;
     private final UserSnapshotService userSnapshotService;
 
-    public BatchConfiguration(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory,
-                              UserRepository userRepository, UserSnapshotRepository userSnapshotRepository, UserSnapshotService userSnapshotService) {
+    public UserSnapshotBatchConfiguration(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory,
+                                          UserRepository userRepository, UserSnapshotRepository userSnapshotRepository, UserSnapshotService userSnapshotService) {
         this.jobBuilderFactory = jobBuilderFactory;
         this.stepBuilderFactory = stepBuilderFactory;
         this.userRepository = userRepository;
@@ -43,7 +41,7 @@ public class BatchConfiguration {
     }
 
     @Bean
-    public RepositoryItemReader<User> reader() {
+    public RepositoryItemReader<User> userSnapshotBatchReader() {
         final HashMap<String, Sort.Direction> sorts = new HashMap<>();
         sorts.put("id", Sort.Direction.ASC);
         return new RepositoryItemReaderBuilder<User>()
@@ -56,12 +54,12 @@ public class BatchConfiguration {
     }
 
     @Bean
-    public UserSnapshotItemProcessor processor() {
+    public UserSnapshotItemProcessor userSnapshotBatchProcessor() {
         return new UserSnapshotItemProcessor(userSnapshotService);
     }
 
     @Bean
-    public RepositoryItemWriter<UserSnapshot> writer() {
+    public RepositoryItemWriter<UserSnapshot> userSnapshotBatchWriter() {
         return new RepositoryItemWriterBuilder<UserSnapshot>()
                 .repository(userSnapshotRepository)
                 .methodName("save")
@@ -69,21 +67,21 @@ public class BatchConfiguration {
     }
 
     @Bean
-    public Job userSnapshotJob(Step processStep) {
+    public Job userSnapshotBatchJob(Step userSnapshotBatchChunk) {
         return jobBuilderFactory.get("userSnapshotJob")
                 .incrementer(new RunIdIncrementer())
-                .flow(processStep)
+                .flow(userSnapshotBatchChunk)
                 .end()
                 .build();
     }
 
     @Bean
-    public Step processStep(RepositoryItemWriter<UserSnapshot> writer) {
+    public Step userSnapshotBatchChunk(RepositoryItemWriter<UserSnapshot> userSnapshotBatchWriter) {
         return stepBuilderFactory.get("processStep")
                 .<User, UserSnapshot> chunk(10)
-                .reader(reader())
-                .processor(processor())
-                .writer(writer)
+                .reader(userSnapshotBatchReader())
+                .processor(userSnapshotBatchProcessor())
+                .writer(userSnapshotBatchWriter)
                 .build();
     }
 }

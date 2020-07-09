@@ -14,15 +14,15 @@ import org.springframework.stereotype.Component;
 public class BatchScheduler {
     private final JobLauncher jobLauncher;
 
-    private final Job userSnapshotJob;
+    private final Job userSnapshotBatchJob;
 
-    public BatchScheduler(JobLauncher jobLauncher, Job userSnapshotJob) {
+    public BatchScheduler(JobLauncher jobLauncher, Job userSnapshotBatchJob) {
         this.jobLauncher = jobLauncher;
-        this.userSnapshotJob = userSnapshotJob;
+        this.userSnapshotBatchJob = userSnapshotBatchJob;
     }
 
     @Scheduled(cron = "0 0 20 * * *")
-    public void schedule() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
-        jobLauncher.run(userSnapshotJob, new JobParameters());
+    public void userSnapshotBatchSchedule() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+        jobLauncher.run(userSnapshotBatchJob, new JobParameters());
     }
 }
